@@ -61,4 +61,4 @@ for (let y = 1; y <= 3; y += 1) for (let x = 1; x <= 3; x += 1) if (x !== 2 || y
 removeConnectedBackground(keyed, 5, 5);
 assert.equal(keyed[3], 0);
 assert.equal(keyed[(2 * 5 + 2) * 4 + 3], 255);
-console.log('LUMS Quest pixel-road collision, A* routing, labels, and world data are valid.');
+console.log('Go LUMS! pixel-road collision, A* routing, labels, and world data are valid.');

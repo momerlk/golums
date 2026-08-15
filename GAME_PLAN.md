@@ -1,4 +1,4 @@
-# LUMS Quest — Fast Implementation Plan
+# Go LUMS! — Fast Implementation Plan
 
 ## Goal
 
