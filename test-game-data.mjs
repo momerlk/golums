@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { WORLD_SIZE, SPAWN, applyMapData, landmarks, npcs } from './game-data.js';
-import { bridgeStraightGaps, clampMapCenter, closeOcclusions, connectedFrom, dilate, findGridPath, isFoliageColor, isRoadColor, isTrunkColor, movementSlices, nearestWalkable } from './navigation.js';
+import { WORLD_SIZE, SPAWN, applyMapData, landmarks, npcs, validSavedPosition } from './game-data.js';
+import { bridgeStraightGaps, clampMapCenter, closeOcclusions, connectedFrom, dilate, distanceToPath, findGridPath, isFoliageColor, isRoadColor, isTrunkColor, movementSlices, nearestWalkable } from './navigation.js';
 import { removeConnectedBackground } from './sprite-utils.js';
 
 const mapData = JSON.parse(readFileSync('assets/pixel_map/master.json'));
@@ -9,6 +9,9 @@ applyMapData(mapData);
 assert.equal(WORLD_SIZE, 8192);
 assert.equal(landmarks.length, mapData.landmarks.filter((item) => item.quest_target).length);
 assert.deepEqual([SPAWN.x, SPAWN.y], [1784, 7920]);
+assert.equal(validSavedPosition([SPAWN.x, SPAWN.y]), true);
+assert.equal(validSavedPosition([-1, SPAWN.y]), false);
+assert.equal(validSavedPosition(['1784', SPAWN.y]), false);
 assert.ok(landmarks.every(({ x, y, id, labels }) => id && labels.length && x > 0 && x < WORLD_SIZE && y > 0 && y < WORLD_SIZE));
 assert.equal(npcs.length, 4);
 assert.equal(mapData.tiles.length, 4);
@@ -41,6 +44,7 @@ const cross = new Uint8Array([
 assert.equal(connectedFrom(cross, 5, 10).reduce((sum, value) => sum + value, 0), 9);
 assert.equal(dilate(cross, 5, 1)[6], 1);
 assert.equal(nearestWalkable(cross, 5, 0, 0), 2);
+assert.equal(distanceToPath(5, 5, [[0, 0], [10, 0]]), 5);
 assert.ok(findGridPath(cross, 5, 10, 14).length >= 2);
 assert.deepEqual(findGridPath(cross, 5, 0, 14), []);
 

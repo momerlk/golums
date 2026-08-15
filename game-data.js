@@ -3,6 +3,10 @@ export const TILE_SIZE = 4096;
 export const SPAWN = { x: 1784, y: 7920 };
 export const landmarks = [];
 
+export const validSavedPosition = (position) => Array.isArray(position)
+  && position.length === 2
+  && position.every((value) => Number.isFinite(value) && value >= 0 && value <= WORLD_SIZE);
+
 const descriptions = {
   academic: 'A landmark of campus life, classes, and deadlines.',
   academic_service: 'Books, supplies, and a reliable stop between classes.',

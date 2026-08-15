@@ -88,12 +88,26 @@ export function connectedFrom(mask, width, start) {
 }
 
 export function nearestWalkable(mask, width, x, y) {
-  let best = -1, bestDistance = Infinity;
-  for (let index = 0; index < mask.length; index += 1) if (mask[index]) {
-    const dx = index % width - x, dy = Math.floor(index / width) - y, distance = dx * dx + dy * dy;
-    if (distance < bestDistance) { best = index; bestDistance = distance; }
+  x = Math.max(0, Math.min(width - 1, x)); y = Math.max(0, Math.min(width - 1, y));
+  const origin = y * width + x; if (mask[origin]) return origin;
+  for (let radius = 1; radius < width; radius += 1) {
+    let best = -1, bestDistance = Infinity;
+    const visit = (px, py) => { if (px < 0 || py < 0 || px >= width || py >= width) return; const index = py * width + px; if (!mask[index]) return; const distance = (px - x) ** 2 + (py - y) ** 2; if (distance < bestDistance || distance === bestDistance && index < best) { best = index; bestDistance = distance; } };
+    for (let px = x - radius; px <= x + radius; px += 1) { visit(px, y - radius); visit(px, y + radius); }
+    for (let py = y - radius + 1; py < y + radius; py += 1) { visit(x - radius, py); visit(x + radius, py); }
+    if (best >= 0) return best;
   }
-  return best;
+  return -1;
+}
+
+export function distanceToPath(x, y, path) {
+  let closest = Infinity;
+  for (let index = 1; index < path.length; index += 1) {
+    const [ax, ay] = path[index - 1], [bx, by] = path[index], dx = bx - ax, dy = by - ay;
+    const length = dx * dx + dy * dy, amount = length ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / length)) : 0;
+    closest = Math.min(closest, Math.hypot(x - ax - amount * dx, y - ay - amount * dy));
+  }
+  return closest;
 }
 
 class MinHeap {
@@ -104,19 +118,19 @@ class MinHeap {
 
 export function findGridPath(mask, width, start, goal) {
   if (start < 0 || goal < 0 || !mask[start] || !mask[goal]) return [];
-  const open = new MinHeap(), cameFrom = new Int32Array(mask.length).fill(-1), cost = new Float32Array(mask.length).fill(Infinity); cost[start] = 0; open.push(start, 0);
+  const open = new MinHeap(), closed = new Uint8Array(mask.length), cameFrom = new Int32Array(mask.length).fill(-1), cost = new Float32Array(mask.length).fill(Infinity); cost[start] = 0; open.push(start, 0);
   const moves = [[1, 0, 1], [-1, 0, 1], [0, 1, 1], [0, -1, 1], [1, 1, 1.414], [1, -1, 1.414], [-1, 1, 1.414], [-1, -1, 1.414]];
   while (open.items.length) {
-    const current = open.pop(); if (current === goal) break; const x = current % width, y = Math.floor(current / width);
+    const current = open.pop(); if (closed[current]) continue; closed[current] = 1; if (current === goal) break; const x = current % width, y = Math.floor(current / width);
     for (const [dx, dy, moveCost] of moves) {
       const nx = x + dx, ny = y + dy, next = ny * width + nx; if (nx < 0 || ny < 0 || nx >= width || ny >= width || !mask[next]) continue;
       if (dx && dy && (!mask[y * width + nx] || !mask[ny * width + x])) continue;
       const nextCost = cost[current] + moveCost; if (nextCost >= cost[next]) continue; cost[next] = nextCost; cameFrom[next] = current;
-      const heuristic = Math.hypot(goal % width - nx, Math.floor(goal / width) - ny); open.push(next, nextCost + heuristic);
+      const hx = Math.abs(goal % width - nx), hy = Math.abs(Math.floor(goal / width) - ny), heuristic = Math.max(hx, hy) + .414 * Math.min(hx, hy); open.push(next, nextCost + heuristic);
     }
   }
   if (start !== goal && cameFrom[goal] < 0) return [];
-  const path = [goal]; while (path[0] !== start) path.unshift(cameFrom[path[0]]); return path.filter((index, position) => {
+  const path = [goal]; while (path[path.length - 1] !== start) path.push(cameFrom[path[path.length - 1]]); path.reverse(); return path.filter((index, position) => {
     if (!position || position === path.length - 1) return true; const a = path[position - 1], b = path[position], c = path[position + 1]; return (b % width - a % width) !== (c % width - b % width) || (Math.floor(b / width) - Math.floor(a / width)) !== (Math.floor(c / width) - Math.floor(b / width));
   });
 }

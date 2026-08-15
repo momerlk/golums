@@ -26,7 +26,7 @@
       <button class="minimap-frame" id="minimap-button" type="button" aria-label="Open full campus map"><span class="north">N</span><i class="player-arrow"></i><b>OPEN</b></button>
       <div class="route-chip" id="route-chip" hidden><span>ROUTE TO</span><b id="route-name"></b><button id="clear-route" type="button" aria-label="Clear route">×</button></div>
 
-      <div class="hint" id="hint" hidden><kbd>E</kbd><span id="hint-text">DISCOVER</span></div>
+      <div class="hint" id="hint" hidden><kbd id="hint-key">A</kbd><span id="hint-text">DISCOVER</span></div>
 
       <nav class="mobile-controls" aria-label="Game controls">
         <div class="dpad">
@@ -45,8 +45,16 @@
         <p class="kicker">Lahore University of Management Sciences</p>
         <h1 id="game-title">LUMS<br /><em>QUEST</em></h1>
         <p>Walk the campus. Find your spots.<br />Collect the stories.</p>
-        <button id="start-button" type="button">START EXPLORING <span>→</span></button>
-        <small>MOVE: D-PAD / WASD · ACT: A / E · MAP: B / M</small>
+        <ul class="launch-guide" aria-label="How to play">
+          <li><kbd>▲◀▼▶</kbd><span><b>MOVE</b> with the D-pad</span></li>
+          <li><kbd>A</kbd><span><b>ACT</b> near people and places</span></li>
+          <li><kbd>B</kbd><span><b>ROUTE</b> through CampusDex</span></li>
+          <li><kbd>MAP</kbd><span><b>NAVIGATE</b> by tapping the minimap</span></li>
+        </ul>
+        <button id="start-button" type="button" disabled>LOADING CAMPUS…</button>
+        <small id="load-status" role="status">Preparing your starting area…</small>
+        <small>Progress and position save automatically on this device.</small>
+        <small class="desktop-shortcuts">KEYBOARD: WASD / ARROWS · E: ACT · M: CAMPUSDEX</small>
       </section>
 
       <section class="panel dialogue-panel" id="dialogue-panel" hidden role="dialog" aria-modal="true" aria-labelledby="dialogue-title">
