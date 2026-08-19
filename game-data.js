@@ -38,11 +38,11 @@ export function applyMapData(data) {
 }
 
 export const npcs = [
-  { id: 'nasir-guide', name: 'NASIR KHAN JAN', near: [1840, 7860], sprite: 'nasir', line: 'Welcome to LUMS! I can show you around whenever you need me.' },
-  { name: 'GUARD IMRAN', near: [900, 2895], color: 0x4775b8, skin: 0xc98258, hair: 0x17293b, line: 'Welcome! Pick a building in CampusDex and follow the route on your minimap.' },
-  { name: 'SANA · FRESHMAN', near: [3752, 5968], color: 0xe96f67, skin: 0xe4a273, hair: 0x43283d, line: 'The campus map now uses the full four-tile survey.' },
-  { name: 'HAMZA · LIBRARY REGULAR', near: [5144, 6780], color: 0x715dcc, skin: 0xb96f4b, hair: 0x24212b, line: 'If you find a free library seat after noon, please report it to science.' },
-  { name: 'AYESHA · ATHLETE', near: [3800, 2912], color: 0xce4d61, skin: 0xd78d68, hair: 0x2b1d27, line: 'The route follows the mapped campus paths across all four tiles.' },
-  { name: 'BILAL · HOSTEL RESIDENT', near: [968, 4232], color: 0x42a76e, skin: 0xb96f4b, hair: 0x17293b, line: 'The hostels are far enough apart to make the bike button feel essential.' },
-  { name: 'MAYA · LOST FRESHMAN', near: [2572, 3390], color: 0xf0b94f, skin: 0xe4a273, hair: 0x43283d, line: 'Open CampusDex, choose a place, and the yellow line will rescue you.' },
+  { id: 'nasir-guide', name: 'NASIR KHAN JAN', near: [1840, 7860], sprite: 'nasir', lines: ['Need the tour again? Just walk up and say the word!'] },
+  { name: 'GUARD IMRAN', near: [900, 2895], color: 0x4775b8, skin: 0xc98258, hair: 0x17293b, lines: ['Halt! ...just kidding, come on in.', 'Pick a building from your CampusDex and I’ll make sure the route lands right at its door.'] },
+  { name: 'SANA · FRESHMAN', near: [3752, 5968], color: 0xe96f67, skin: 0xe4a273, hair: 0x43283d, lines: ['Oh hey! First week here too?', 'I got lost outside SBASSE for twenty minutes on day one. The map would’ve saved me.'] },
+  { name: 'HAMZA · LIBRARY REGULAR', near: [5144, 6780], color: 0x715dcc, skin: 0xb96f4b, hair: 0x24212b, lines: ['Shh. Studying.', '...okay fine, I could use a break. Rumor says the library never runs out of seats after noon.'] },
+  { name: 'AYESHA · ATHLETE', near: [3800, 2912], color: 0xce4d61, skin: 0xd78d68, hair: 0x2b1d27, lines: ['Practice starts in ten! Walk and talk?', 'Every path on this map is real — I’ve run every single one of them.'] },
+  { name: 'BILAL · HOSTEL RESIDENT', near: [968, 4232], color: 0x42a76e, skin: 0xb96f4b, hair: 0x17293b, lines: ['The hostels feel like a whole different campus out here.', 'Grab the bike if you’re heading my way. Trust me on this one.'] },
+  { name: 'MAYA · LOST FRESHMAN', near: [2572, 3390], color: 0xf0b94f, skin: 0xe4a273, hair: 0x43283d, lines: ['Wait — do YOU know where the Academic Block is?', 'Never mind, open your CampusDex and follow the yellow line. Works every time.'] },
 ];
