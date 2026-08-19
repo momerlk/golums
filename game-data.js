@@ -6,6 +6,7 @@ export const landmarks = [];
 export const validSavedPosition = (position) => Array.isArray(position)
   && position.length === 2
   && position.every((value) => Number.isFinite(value) && value >= 0 && value <= WORLD_SIZE);
+export const validGender = (gender) => ['male', 'female'].includes(gender);
 
 const descriptions = {
   academic: 'A landmark of campus life, classes, and deadlines.',
@@ -41,4 +42,6 @@ export const npcs = [
   { name: 'SANA · FRESHMAN', near: [3752, 5968], color: 0xe96f67, skin: 0xe4a273, hair: 0x43283d, line: 'The campus map now uses the full four-tile survey.' },
   { name: 'HAMZA · LIBRARY REGULAR', near: [5144, 6780], color: 0x715dcc, skin: 0xb96f4b, hair: 0x24212b, line: 'If you find a free library seat after noon, please report it to science.' },
   { name: 'AYESHA · ATHLETE', near: [3800, 2912], color: 0xce4d61, skin: 0xd78d68, hair: 0x2b1d27, line: 'The route follows the mapped campus paths across all four tiles.' },
+  { name: 'BILAL · HOSTEL RESIDENT', near: [968, 4232], color: 0x42a76e, skin: 0xb96f4b, hair: 0x17293b, line: 'The hostels are far enough apart to make the bike button feel essential.' },
+  { name: 'MAYA · LOST FRESHMAN', near: [2572, 3390], color: 0xf0b94f, skin: 0xe4a273, hair: 0x43283d, line: 'Open CampusDex, choose a place, and the yellow line will rescue you.' },
 ];

@@ -17,8 +17,8 @@ const repeatedLabels={J:[[900,2912],[2164,2912],[968,4232]],K:[[6316,6080],[7224
 
 const candidate = new Uint8Array(GRID_SIZE * GRID_SIZE);
 for (const [id, column, row] of tiles) {
-  const result = spawnSync('ffmpeg', ['-loglevel','error','-i',`assets/pixel_map/${id}.png`,'-vf','scale=1024:1024:flags=neighbor','-f','rawvideo','-pix_fmt','rgb24','pipe:1'], { maxBuffer: 1024 * 1024 * 8 });
-  if (result.status) throw new Error(result.stderr.toString() || `Could not read ${id}.png`);
+  const result = spawnSync('ffmpeg', ['-loglevel','error','-i',`assets/pixel_map/${id}.webp`,'-vf','scale=1024:1024:flags=neighbor','-f','rawvideo','-pix_fmt','rgb24','pipe:1'], { maxBuffer: 1024 * 1024 * 8 });
+  if (result.status) throw new Error(result.stderr.toString() || `Could not read ${id}.webp`);
   const pixels = result.stdout;
   for (let y=0;y<TILE_GRID;y++) for (let x=0;x<TILE_GRID;x++) {
     let hits=0; for (let oy=0;oy<2;oy++) for (let ox=0;ox<2;ox++) { const pixel=((y*2+oy)*1024+x*2+ox)*3; if (isRoadColor(pixels[pixel],pixels[pixel+1],pixels[pixel+2])) hits++; }
@@ -29,11 +29,6 @@ const bridged = dilate(closeOcclusions(bridgeStraightGaps(candidate, GRID_SIZE, 
 const spawnX=1784/CELL_SIZE, spawnY=7920/CELL_SIZE, start=nearestWalkable(bridged,GRID_SIZE,spawnX,spawnY), walkable=connectedFrom(bridged,GRID_SIZE,start);
 const encode = (mask, width, x0=0, y0=0, size=width) => Array.from({length:size},(_,y)=>{const runs=[];let start=-1;for(let x=0;x<=size;x++){const on=x<size&&mask[(y+y0)*width+x+x0];if(on&&start<0)start=x;if(!on&&start>=0){runs.push([start,x-start]);start=-1;}}return runs;});
 const entrances = places.map((item)=>({id:`entrance_${item.letter}`,building_id:item.reference_object_id,position_global:item.centroid_global,accessible:true}));
-for (const [id,column,row] of tiles) {
-  const localLandmarks=places.filter((item)=>item.label_points_global.some(([x,y])=>Math.floor(x/TILE_SIZE)===column&&Math.floor(y/TILE_SIZE)===row)).map((item)=>({...item,centroid_local:[item.centroid_global[0]-column*TILE_SIZE,item.centroid_global[1]-row*TILE_SIZE],label_points_local:item.label_points_global.filter(([x,y])=>Math.floor(x/TILE_SIZE)===column&&Math.floor(y/TILE_SIZE)===row).map(([x,y])=>[x-column*TILE_SIZE,y-row*TILE_SIZE])}));
-  writeFileSync(`assets/pixel_map/${id}.json`,JSON.stringify({schema_version:'2.0',tile:{id,row:row+1,column:column+1,width_px:TILE_SIZE,height_px:TILE_SIZE,global_offset:[column*TILE_SIZE,row*TILE_SIZE]},landmarks:localLandmarks,building_entrances:entrances.filter(({building_id})=>localLandmarks.some(({reference_object_id})=>reference_object_id===building_id)),walkability:{cell_size_px:CELL_SIZE,width:TILE_GRID,height:TILE_GRID,rows:encode(walkable,GRID_SIZE,column*TILE_GRID,row*TILE_GRID,TILE_GRID)}},null,2)+'\n');
-}
 const master={schema_version:'2.0',map:{id:'lums_campus',name:'LUMS Campus',global_width_px:8192,global_height_px:8192,tile_width_px:TILE_SIZE,tile_height_px:TILE_SIZE},tiles:tiles.map(([id,column,row])=>({id,row:row+1,column:column+1,width_px:TILE_SIZE,height_px:TILE_SIZE,global_offset:[column*TILE_SIZE,row*TILE_SIZE]})),landmarks:places,building_entrances:entrances,walkability:{cell_size_px:CELL_SIZE,width:GRID_SIZE,height:GRID_SIZE,rows:encode(walkable,GRID_SIZE)},quality_control:{source:'clean pixel tiles + labelled_pixel_map references',coordinate_scale_from_reference:2,walkability_connected_from:'In Gate',generated:true}};
 writeFileSync('assets/pixel_map/master.json',JSON.stringify(master,null,2)+'\n');
-writeFileSync('assets/pixel_map/navigation.json',JSON.stringify({schema_version:'2.0',map_id:'lums_campus',routing:'A* over master.walkability',cell_size_px:CELL_SIZE,width:GRID_SIZE,height:GRID_SIZE},null,2)+'\n');
-console.log(`Generated four tile annotations and ${walkable.reduce((sum,value)=>sum+value,0)} walkable cells.`);
+console.log(`Generated map data with ${walkable.reduce((sum,value)=>sum+value,0)} walkable cells.`);

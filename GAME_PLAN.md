@@ -38,7 +38,7 @@ Add these only after students enjoy the walking-and-discovery loop.
 
 | Asset | Use |
 |---|---|
-| `assets/pixel_map.png` | The 4096×4096 playable world background |
+| `assets/pixel_map.webp` | The 4096×4096 playable world background |
 | `assets/labelled_pixel_map.png` | Primary reference for landmark names and positions; never shown during play |
 | `assets/official_map.png` | Cross-check campus identity and relative building placement |
 | `assets/satelite_map.png` | Cross-check paths and central-campus landmarks |
@@ -169,7 +169,7 @@ NPCs do not need schedules, branching dialogue, or quests yet.
 ```text
 lums_map/
 ├── assets/
-│   ├── pixel_map.png
+│   ├── pixel_map.webp
 │   ├── labelled_pixel_map.png
 │   ├── official_map.png
 │   ├── satelite_map.png
@@ -189,7 +189,7 @@ Do not split scenes or systems further until a second playable area exists.
 ### Milestone 1 — Walk the campus (2–3 hours)
 
 - Add the static game shell and Phaser CDN runtime.
-- Load `pixel_map.png` as the world.
+- Load `pixel_map.webp` as the world.
 - Add player spawn at In Gate.
 - Add keyboard movement, camera follow, bounds, and pixel rendering.
 - Add mobile controls.
@@ -198,7 +198,7 @@ Do not split scenes or systems further until a second playable area exists.
 
 ### Milestone 2 — Make the map believable (2–4 hours)
 
-- Derive walkable pixels from `pixel_map.png` and reuse them for movement and A* routes.
+- Derive walkable pixels from `pixel_map.webp` and reuse them for movement and A* routes.
 - Add area-name triggers and interaction prompts.
 - Add the directory overlay with camera focus.
 - Record all confirmed landmark coordinates in `campus.js`.

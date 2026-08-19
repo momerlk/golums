@@ -110,6 +110,17 @@ export function distanceToPath(x, y, path) {
   return closest;
 }
 
+export function trimPathToPlayer(path, x, y) {
+  if (path.length < 2) return path;
+  let closest = Infinity, segment = 0, point = path[0];
+  for (let index = 1; index < path.length; index += 1) {
+    const [ax, ay] = path[index - 1], [bx, by] = path[index], dx = bx - ax, dy = by - ay, length = dx * dx + dy * dy;
+    const amount = length ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / length)) : 0, projected = [ax + amount * dx, ay + amount * dy], distance = Math.hypot(x - projected[0], y - projected[1]);
+    if (distance < closest) { closest = distance; segment = index; point = projected; }
+  }
+  return [point, ...path.slice(segment)];
+}
+
 class MinHeap {
   constructor() { this.items = []; }
   push(value, priority) { const item = { value, priority }; this.items.push(item); let i = this.items.length - 1; while (i) { const parent = Math.floor((i - 1) / 2); if (this.items[parent].priority <= priority) break; this.items[i] = this.items[parent]; i = parent; } this.items[i] = item; }

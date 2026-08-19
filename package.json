@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node test-game-data.mjs"
+    "build:canopy": "node build-canopy.mjs",
+    "build:players": "node build-player-portraits.mjs",
+    "test": "node test-game-data.mjs && npm test --prefix backend"
   }
 }

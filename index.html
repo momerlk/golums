@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#17293b" />
     <meta name="description" content="A playful pixel-art walk around LUMS." />
+    <meta name="golums-api-url" content="https://golums-api-60252382487.asia-south1.run.app" />
     <title>Go LUMS!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +21,7 @@
         <div class="area-chip"><span class="pulse"></span><span id="area-name">IN GATE</span></div>
         <button class="dex-button" id="dex-button" type="button" aria-haspopup="dialog">CAMPUSDEX <b id="dex-count">0/24</b></button>
         <button class="bike-button" id="bike-button" type="button" aria-pressed="false" aria-label="Toggle bike mode">BIKE</button>
+        <button class="help-button" id="help-button" type="button" aria-label="Replay tutorial">?</button>
         <button class="sound-button" id="sound-button" type="button" aria-label="Toggle sound">♫</button>
       </header>
 
@@ -41,45 +43,62 @@
         </div>
       </nav>
 
-      <section class="start-screen" id="start-screen" aria-labelledby="game-title">
-        <p class="kicker">Lahore University of Management Sciences</p>
-        <h1 id="game-title">GO<br /><em>LUMS!</em></h1>
-        <p>Walk the campus. Find your spots.<br />Collect the stories.</p>
-        <ul class="launch-guide" aria-label="How to play">
-          <li><kbd>▲◀▼▶</kbd><span><b>MOVE</b> with the D-pad</span></li>
-          <li><kbd>A</kbd><span><b>ACT</b> near people and places</span></li>
-          <li><kbd>B</kbd><span><b>ROUTE</b> through CampusDex</span></li>
-          <li><kbd>MAP</kbd><span><b>NAVIGATE</b> by tapping the minimap</span></li>
-        </ul>
-        <button id="start-button" type="button">START EXPLORING <span>→</span></button>
-        <small id="load-status" role="status">Preparing your starting area…</small>
-        <small>Progress and position save automatically on this device.</small>
-        <small class="desktop-shortcuts">KEYBOARD: WASD / ARROWS · E: ACT · M: CAMPUSDEX</small>
+      <section class="profile-screen" id="profile-screen" aria-labelledby="profile-title">
+        <form id="profile-form">
+          <p class="profile-brand" aria-label="Go LUMS!">GO <em>LUMS!</em></p>
+          <p class="profile-promise">Explore LUMS, meet people, discover landmarks, and build your CampusDex.</p>
+          <p class="kicker">YOUR CAMPUS ADVENTURE STARTS HERE</p>
+          <h2 id="profile-title">CREATE YOUR<br /><em>PLAYER</em></h2>
+          <label class="email-field">EMAIL
+            <input id="profile-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required />
+          </label>
+          <fieldset>
+            <legend>CHOOSE YOUR CHARACTER</legend>
+            <div class="character-options">
+              <label><input type="radio" name="gender" value="male" checked /><span><img src="assets/character-red.png" alt="Red character" /><b>RED</b></span></label>
+              <label><input type="radio" name="gender" value="female" /><span><img src="assets/character-leaf.png" alt="Leaf character" /><b>LEAF</b></span></label>
+            </div>
+          </fieldset>
+          <button type="submit">ENTER CAMPUS <span>→</span></button>
+          <small id="load-status" role="status">Preparing In Gate…</small>
+          <small>Your email keeps your character and progress together across sessions.</small>
+        </form>
       </section>
 
-      <section class="panel dialogue-panel" id="dialogue-panel" hidden role="dialog" aria-modal="true" aria-labelledby="dialogue-title">
+      <aside class="tutorial" id="tutorial" aria-live="polite" hidden>
+        <div class="tutorial-progress" id="tutorial-progress"></div>
+        <p class="kicker" id="tutorial-kicker"></p>
+        <h2 id="tutorial-title"></h2>
+        <p id="tutorial-copy"></p>
+        <div class="tutorial-actions">
+          <button class="tutorial-skip" id="tutorial-skip" type="button">SKIP TOUR</button>
+          <button class="primary" id="tutorial-next" type="button">NEXT <span>→</span></button>
+        </div>
+      </aside>
+
+      <dialog class="panel dialogue-panel" id="dialogue-panel" aria-labelledby="dialogue-title">
         <button class="close" data-close="dialogue-panel" aria-label="Close">×</button>
         <p class="kicker" id="dialogue-kicker">LANDMARK DISCOVERED</p>
         <h2 id="dialogue-title"></h2>
         <p id="dialogue-copy"></p>
         <button class="primary" data-close="dialogue-panel" type="button">NICE! <span>↵</span></button>
-      </section>
+      </dialog>
 
-      <section class="panel dex-panel" id="dex-panel" hidden role="dialog" aria-modal="true" aria-labelledby="dex-title">
+      <dialog class="panel dex-panel" id="dex-panel" aria-labelledby="dex-title">
         <button class="close" data-close="dex-panel" aria-label="Close">×</button>
         <p class="kicker">YOUR CAMPUS FIELD GUIDE</p>
         <h2 id="dex-title">CAMPUSDEX <span id="dex-progress">0 / 24</span></h2>
         <p class="panel-copy">Choose any place to draw a walking route from your current position.</p>
         <div class="dex-list" id="dex-list"></div>
-      </section>
+      </dialog>
 
-      <section class="panel map-panel" id="map-panel" hidden role="dialog" aria-modal="true" aria-labelledby="map-title">
+      <dialog class="panel map-panel" id="map-panel" aria-labelledby="map-title">
         <button class="close" data-close="map-panel" aria-label="Close">×</button>
         <p class="kicker">NORTH-UP CAMPUS OVERVIEW</p>
         <h2 id="map-title">FULL MAP</h2>
         <canvas id="full-map" width="1024" height="1024" aria-label="Full LUMS campus map showing your current position"></canvas>
         <p class="map-help">TAP: SET WAYPOINT · D-PAD: MOVE · A/B: ZOOM</p>
-      </section>
+      </dialog>
 
       <section class="toast" id="toast" role="status" aria-live="polite"></section>
     </main>
