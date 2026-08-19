@@ -71,8 +71,6 @@
       </section>
 
       <div class="dialogue-scrim" id="dialogue-scrim" aria-hidden="true"></div>
-      <div id="tutorial-prompt" hidden role="status"><span>▸</span><span id="tutorial-prompt-text"></span></div>
-
       <dialog class="panel dialogue-panel" id="dialogue-panel" aria-labelledby="dialogue-title">
         <button class="close" data-close="dialogue-panel" aria-label="Close">×</button>
         <div class="dialogue-portrait" id="dialogue-portrait" hidden><canvas id="dialogue-portrait-canvas" width="72" height="72"></canvas></div>
@@ -112,7 +110,14 @@
         </dl>
         <div class="support-actions">
           <button class="primary" id="copy-iban" type="button">COPY IBAN</button>
-          <button class="primary" id="open-nayapay" type="button">OPEN NAYAPAY <span>↗</span></button>
+        </div>
+        <p class="bank-app-help">Choose an installed banking app, then transfer using the account details above.</p>
+        <div class="bank-apps" aria-label="Choose banking app">
+          <button type="button" data-bank-app="nayapay">NAYAPAY <span>↗</span></button>
+          <button type="button" data-bank-app="easypaisa">EASYPAISA <span>↗</span></button>
+          <button type="button" data-bank-app="jazzcash">JAZZCASH <span>↗</span></button>
+          <button type="button" data-bank-app="sadapay">SADAPAY <span>↗</span></button>
+          <button type="button" data-bank-app="alfa">ALFA <span>↗</span></button>
         </div>
       </dialog>
 
