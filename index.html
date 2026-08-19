@@ -51,8 +51,11 @@
           <p class="profile-promise">Explore LUMS, meet people, discover landmarks, and build your CampusDex.</p>
           <p class="kicker">YOUR CAMPUS ADVENTURE STARTS HERE</p>
           <h2 id="profile-title">CREATE YOUR<br /><em>PLAYER</em></h2>
-          <label class="email-field">EMAIL
-            <input id="profile-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required />
+          <label class="email-field">USERNAME
+            <input id="profile-username" name="username" type="text" autocomplete="nickname" minlength="2" maxlength="30" placeholder="Your player name" required />
+          </label>
+          <label class="email-field">PHONE NUMBER
+            <input id="profile-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" value="+92 " maxlength="14" pattern="\+92 3[0-9]{9}" required />
           </label>
           <fieldset>
             <legend>CHOOSE YOUR CHARACTER</legend>
@@ -63,7 +66,7 @@
           </fieldset>
           <button id="profile-submit" type="submit" disabled>PREPARING IN GATE…</button>
           <small id="load-status" role="status">Preparing In Gate…</small>
-          <small>Your email keeps your character and progress together across sessions.</small>
+          <small>Your phone number keeps your character and progress together across sessions.</small>
         </form>
       </section>
 
@@ -109,7 +112,7 @@
         </dl>
         <div class="support-actions">
           <button class="primary" id="copy-iban" type="button">COPY IBAN</button>
-          <a class="primary" href="https://nayapay.com/" target="_blank" rel="noopener noreferrer">OPEN NAYAPAY <span>↗</span></a>
+          <button class="primary" id="open-nayapay" type="button">OPEN NAYAPAY <span>↗</span></button>
         </div>
       </dialog>
 

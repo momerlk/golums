@@ -7,6 +7,12 @@ export const validSavedPosition = (position) => Array.isArray(position)
   && position.length === 2
   && position.every((value) => Number.isFinite(value) && value >= 0 && value <= WORLD_SIZE);
 export const validGender = (gender) => ['male', 'female'].includes(gender);
+export const normalizePakistanPhone = (value) => {
+  let digits = String(value || '').replace(/\D/g, '');
+  if (digits.startsWith('92')) digits = digits.slice(2);
+  if (digits.startsWith('0')) digits = digits.slice(1);
+  return /^3\d{9}$/.test(digits) ? `+92${digits}` : null;
+};
 
 const descriptions = {
   academic: 'A landmark of campus life, classes, and deadlines.',

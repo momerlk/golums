@@ -52,7 +52,7 @@ The frontend intentionally uses plain HTML, CSS, JavaScript modules, and Phaser.
 
 - `loadSave()` restores local progress.
 - `save()` writes local progress and schedules remote persistence.
-- `syncRemote()` loads the email-owned remote player.
+- `syncRemote()` loads the phone-owned remote player.
 - `progressPayload()` defines the frontend/backend progress contract.
 - `updateHud()` derives HUD content from current game state.
 - `openPanel()` and `openDialogue()` own dialog behavior.
@@ -61,13 +61,13 @@ Avoid duplicating these responsibilities in event handlers.
 
 ## Player Identity and Persistence
 
-- Normalized email is the unique player identifier.
-- One MongoDB document represents one email.
+- Normalized Pakistani phone number (`+923XXXXXXXXX`) is the unique player identifier.
+- One MongoDB document represents one phone number.
 - Character, discoveries, position, sound, bike mode, and timestamps must save together.
 - Local storage remains the offline fallback.
 - Remote failures must never erase valid local progress.
-- The current save format is version `7`; preserve backward loading unless deliberately migrating it.
-- Do not treat email identity as authentication. Adding protected accounts requires a separate OTP or login flow.
+- The current save format is version `8`; preserve backward loading unless deliberately migrating it.
+- Do not treat phone identity as authentication. Adding protected accounts requires a separate OTP or login flow.
 
 When changing saved fields, update all of the following together:
 
@@ -144,19 +144,19 @@ The backend is an Express 5 service using the official MongoDB driver.
 Endpoints:
 
 - `GET /health`: service health check.
-- `POST /api/progress/load`: load a player by normalized email.
+- `POST /api/progress/load`: load a player by normalized phone; legacy email reads remain temporarily compatible.
 - `PUT /api/progress`: validate and replace/upsert the complete player document.
 
 Database:
 
 - Database: `golums`.
 - Collection: `players`.
-- MongoDB `_id`: normalized email.
+- MongoDB `_id`: normalized phone for new players; legacy email documents remain readable.
 
 Trust-boundary rules:
 
 - Validate every request body before database access.
-- Reject unknown gender values, invalid emails, malformed positions, invalid landmark IDs, and invalid timestamps.
+- Reject unknown gender values, invalid usernames or phone numbers, malformed positions, invalid landmark IDs, and invalid timestamps.
 - Keep request bodies size-limited.
 - Never log secrets or full MongoDB connection strings.
 - CORS currently permits all origins and credentials are disabled.

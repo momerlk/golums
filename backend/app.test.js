@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
-import { createApp, validateProgress } from './app.js';
+import { createApp, normalizePhone, validateProgress } from './app.js';
 
 const valid = { email: 'student@lums.edu.pk', gender: 'female', discovered: ['landmark_A'], position: [1784, 7920], muted: false, biking: false, updatedAt: '2026-08-19T12:00:00.000Z' };
+const phonePlayer = { ...valid, email: undefined, phone: '03000856955', username: 'Omer' };
 const documents = new Map();
 const players = {
   findOne: ({ _id }) => documents.get(_id) || null,
@@ -24,6 +25,12 @@ test('validates progress at the trust boundary', () => {
   assert.equal(validateProgress({ ...valid, position: [-1, 4] }), null);
 });
 
+test('normalizes Pakistani phone identities', () => {
+  assert.equal(normalizePhone('+92 300 0856955'), '+923000856955');
+  assert.equal(validateProgress(phonePlayer)._id, '+923000856955');
+  assert.equal(validateProgress({ ...phonePlayer, username: 'x' }), null);
+});
+
 test('email is the unique save and load identity', async () => {
   assert.equal((await fetch(`${baseUrl}/health`)).status, 200);
   assert.equal((await fetch(`${baseUrl}/api/progress/load`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: valid.email }) })).status, 404);
@@ -39,4 +46,11 @@ test('allows saves from any frontend origin', async () => {
   const response = await fetch(`${baseUrl}/api/progress`, { method: 'OPTIONS', headers: { origin: 'https://any-preview.example', 'access-control-request-method': 'PUT' } });
   assert.equal(response.status, 204);
   assert.equal(response.headers.get('access-control-allow-origin'), '*');
+});
+
+test('phone is the unique save and load identity', async () => {
+  assert.equal((await fetch(`${baseUrl}/api/progress`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(phonePlayer) })).status, 200);
+  const response = await fetch(`${baseUrl}/api/progress/load`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ phone: '+92 300 0856955' }) });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).username, 'Omer');
 });

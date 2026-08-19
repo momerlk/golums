@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { WORLD_SIZE, SPAWN, applyMapData, landmarks, npcs, validGender, validSavedPosition } from './game-data.js';
+import { WORLD_SIZE, SPAWN, applyMapData, landmarks, normalizePakistanPhone, npcs, validGender, validSavedPosition } from './game-data.js';
 import { bridgeStraightGaps, clampMapCenter, closeOcclusions, connectedFrom, dilate, distanceToPath, findGridPath, isFoliageColor, isRoadColor, isTrunkColor, movementSlices, nearestWalkable, trimPathToPlayer } from './navigation.js';
 import { removeSpriteSheetBackground } from './sprite-utils.js';
 
@@ -16,6 +16,9 @@ assert.equal(validGender('female'), true);
 assert.equal(validGender('other'), false);
 assert.ok(landmarks.every(({ x, y, id, labels }) => id && labels.length && x > 0 && x < WORLD_SIZE && y > 0 && y < WORLD_SIZE));
 assert.equal(npcs.length, 7);
+assert.equal(normalizePakistanPhone('0300 0856955'), '+923000856955');
+assert.equal(normalizePakistanPhone('+92-300-0856955'), '+923000856955');
+assert.equal(normalizePakistanPhone('1234'), null);
 assert.equal(mapData.tiles.length, 4);
 assert.ok(mapData.tiles.every(({ id }) => existsSync(`assets/pixel_map/${id}.webp`)));
 assert.equal(existsSync('assets/pixel_map/canopy-overlay.png'), true);
