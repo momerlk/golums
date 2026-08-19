@@ -118,7 +118,7 @@ class CampusScene extends Phaser.Scene {
   clearRoute() { this.routeUnderlay.clear(); this.routeLine.clear(); this.targetMarker.clear(); this.routePath=null; state.target = null; el('route-chip').hidden = true; renderDex(); }
   layout() {
     const width = this.scale.width, height = this.scale.height, mobile = width < 760; this.cameras.main.setZoom(cameraZoom(this));
-    const size = mobile ? Math.min(174, width * .44) : 240, x = mobile ? width - size - 12 : 24, y = mobile ? 100 : height - size - 24; this.mini.setViewport(x, y, size, size).setZoom(mobile ? .18 : .16);
+    const size = mobile ? Math.min(174, width * .44) : 240, x = mobile ? width - size - 12 : 24, y = mobile ? 138 : height - size - 24; this.mini.setViewport(x, y, size, size).setZoom(mobile ? .18 : .16);
     this.miniMaskGraphic?.destroy(); this.miniMaskGraphic = this.make.graphics({ add: false }).fillStyle(0xffffff).fillCircle(x + size / 2, y + size / 2, size / 2 - 4); this.mini.setMask(this.miniMaskGraphic.createGeometryMask()); document.documentElement.style.setProperty('--mini-x', `${x}px`); document.documentElement.style.setProperty('--mini-y', `${y}px`); document.documentElement.style.setProperty('--mini-size', `${size}px`); document.documentElement.style.setProperty('--route-y', `${mobile ? y + size + 8 : y - 58}px`);
   }
   update(time, delta) {
