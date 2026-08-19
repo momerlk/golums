@@ -15,7 +15,7 @@ assert.equal(validSavedPosition(['1784', SPAWN.y]), false);
 assert.equal(validGender('female'), true);
 assert.equal(validGender('other'), false);
 assert.ok(landmarks.every(({ x, y, id, labels }) => id && labels.length && x > 0 && x < WORLD_SIZE && y > 0 && y < WORLD_SIZE));
-assert.equal(npcs.length, 6);
+assert.equal(npcs.length, 7);
 assert.equal(mapData.tiles.length, 4);
 assert.ok(mapData.tiles.every(({ id }) => existsSync(`assets/pixel_map/${id}.webp`)));
 assert.equal(existsSync('assets/pixel_map/canopy-overlay.png'), true);

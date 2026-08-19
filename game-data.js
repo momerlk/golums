@@ -38,6 +38,7 @@ export function applyMapData(data) {
 }
 
 export const npcs = [
+  { id: 'nasir-guide', name: 'NASIR KHAN JAN', near: [1840, 7860], sprite: 'nasir', line: 'Welcome to LUMS! I can show you around whenever you need me.' },
   { name: 'GUARD IMRAN', near: [900, 2895], color: 0x4775b8, skin: 0xc98258, hair: 0x17293b, line: 'Welcome! Pick a building in CampusDex and follow the route on your minimap.' },
   { name: 'SANA · FRESHMAN', near: [3752, 5968], color: 0xe96f67, skin: 0xe4a273, hair: 0x43283d, line: 'The campus map now uses the full four-tile survey.' },
   { name: 'HAMZA · LIBRARY REGULAR', near: [5144, 6780], color: 0x715dcc, skin: 0xb96f4b, hair: 0x24212b, line: 'If you find a free library seat after noon, please report it to science.' },
