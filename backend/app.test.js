@@ -12,7 +12,7 @@ let server;
 let baseUrl;
 
 before(async () => {
-  server = createApp(players, 'http://localhost').listen(0);
+  server = createApp(players).listen(0);
   await new Promise((resolve) => server.once('listening', resolve));
   baseUrl = `http://127.0.0.1:${server.address().port}`;
 });
@@ -33,4 +33,10 @@ test('email is the unique save and load identity', async () => {
   assert.equal(response.status, 200);
   assert.equal((await response.json()).gender, 'male');
   assert.equal(documents.size, 1);
+});
+
+test('allows saves from any frontend origin', async () => {
+  const response = await fetch(`${baseUrl}/api/progress`, { method: 'OPTIONS', headers: { origin: 'https://any-preview.example', 'access-control-request-method': 'PUT' } });
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get('access-control-allow-origin'), '*');
 });

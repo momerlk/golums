@@ -17,6 +17,8 @@
       <div id="game" aria-label="Go LUMS! game canvas"></div>
       <div class="scanlines" aria-hidden="true"></div>
 
+      <div class="creator-banner">MADE BY OMER MALIK &amp; SHAN SHOUKAT <button id="coffee-button" type="button">☕ BUY US A COFFEE</button></div>
+
       <header class="hud" aria-live="polite">
         <div class="area-chip"><span class="pulse"></span><span id="area-name">IN GATE</span></div>
         <button class="dex-button" id="dex-button" type="button" aria-haspopup="dialog">CAMPUSDEX <b id="dex-count">0/24</b></button>
@@ -44,7 +46,7 @@
       </nav>
 
       <section class="profile-screen" id="profile-screen" aria-labelledby="profile-title">
-        <form id="profile-form">
+        <form id="profile-form" onsubmit="return false">
           <p class="profile-brand" aria-label="Go LUMS!">GO <em>LUMS!</em></p>
           <p class="profile-promise">Explore LUMS, meet people, discover landmarks, and build your CampusDex.</p>
           <p class="kicker">YOUR CAMPUS ADVENTURE STARTS HERE</p>
@@ -59,7 +61,7 @@
               <label><input type="radio" name="gender" value="female" /><span><img src="assets/character-leaf.png" alt="Leaf character" /><b>LEAF</b></span></label>
             </div>
           </fieldset>
-          <button type="submit">ENTER CAMPUS <span>→</span></button>
+          <button id="profile-submit" type="submit" disabled>PREPARING IN GATE…</button>
           <small id="load-status" role="status">Preparing In Gate…</small>
           <small>Your email keeps your character and progress together across sessions.</small>
         </form>
@@ -98,6 +100,22 @@
         <h2 id="map-title">FULL MAP</h2>
         <canvas id="full-map" width="1024" height="1024" aria-label="Full LUMS campus map showing your current position"></canvas>
         <p class="map-help">TAP: SET WAYPOINT · D-PAD: MOVE · A/B: ZOOM</p>
+      </dialog>
+
+      <dialog class="panel support-panel" id="support-panel" aria-labelledby="support-title">
+        <button class="close" data-close="support-panel" aria-label="Close">×</button>
+        <p class="kicker">SUPPORT GO LUMS!</p>
+        <h2 id="support-title">BUY US A COFFEE</h2>
+        <dl class="payment-details">
+          <div><dt>ACCOUNT TITLE</dt><dd>Omer Ali Malik</dd></div>
+          <div><dt>BANK</dt><dd>NayaPay</dd></div>
+          <div><dt>IBAN</dt><dd>PK50NAYA1234503000856955</dd></div>
+          <div><dt>ACCOUNT NUMBER</dt><dd>03000856955</dd></div>
+        </dl>
+        <div class="support-actions">
+          <button class="primary" id="copy-iban" type="button">COPY IBAN</button>
+          <a class="primary" href="https://nayapay.com/" target="_blank" rel="noopener noreferrer">OPEN NAYAPAY <span>↗</span></a>
+        </div>
       </dialog>
 
       <section class="toast" id="toast" role="status" aria-live="polite"></section>
