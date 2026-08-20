@@ -25,10 +25,10 @@ for (const [id, column, row] of tiles) {
     if (hits) candidate[(row*TILE_GRID+y)*GRID_SIZE+column*TILE_GRID+x]=1;
   }
 }
-const bridged = dilate(closeOcclusions(bridgeStraightGaps(candidate, GRID_SIZE, 18), GRID_SIZE, 10), GRID_SIZE, 1);
+const bridged = dilate(closeOcclusions(bridgeStraightGaps(candidate, GRID_SIZE, 18), GRID_SIZE, 10), GRID_SIZE, 2);
 const spawnX=1784/CELL_SIZE, spawnY=7920/CELL_SIZE, start=nearestWalkable(bridged,GRID_SIZE,spawnX,spawnY), walkable=connectedFrom(bridged,GRID_SIZE,start);
 const encode = (mask, width, x0=0, y0=0, size=width) => Array.from({length:size},(_,y)=>{const runs=[];let start=-1;for(let x=0;x<=size;x++){const on=x<size&&mask[(y+y0)*width+x+x0];if(on&&start<0)start=x;if(!on&&start>=0){runs.push([start,x-start]);start=-1;}}return runs;});
-const entrances = places.map((item)=>({id:`entrance_${item.letter}`,building_id:item.reference_object_id,position_global:item.centroid_global,accessible:true}));
+const entrances = places.map((item)=>{const index=nearestWalkable(walkable,GRID_SIZE,Math.floor(item.centroid_global[0]/CELL_SIZE),Math.floor(item.centroid_global[1]/CELL_SIZE));return {id:`entrance_${item.letter}`,building_id:item.reference_object_id,position_global:[index%GRID_SIZE*CELL_SIZE+CELL_SIZE/2,Math.floor(index/GRID_SIZE)*CELL_SIZE+CELL_SIZE/2],accessible:true};});
 const master={schema_version:'2.0',map:{id:'lums_campus',name:'LUMS Campus',global_width_px:8192,global_height_px:8192,tile_width_px:TILE_SIZE,tile_height_px:TILE_SIZE},tiles:tiles.map(([id,column,row])=>({id,row:row+1,column:column+1,width_px:TILE_SIZE,height_px:TILE_SIZE,global_offset:[column*TILE_SIZE,row*TILE_SIZE]})),landmarks:places,building_entrances:entrances,walkability:{cell_size_px:CELL_SIZE,width:GRID_SIZE,height:GRID_SIZE,rows:encode(walkable,GRID_SIZE)},quality_control:{source:'clean pixel tiles + labelled_pixel_map references',coordinate_scale_from_reference:2,walkability_connected_from:'In Gate',generated:true}};
 writeFileSync('assets/pixel_map/master.json',JSON.stringify(master,null,2)+'\n');
 console.log(`Generated map data with ${walkable.reduce((sum,value)=>sum+value,0)} walkable cells.`);

@@ -24,6 +24,7 @@ assert.ok(mapData.tiles.every(({ id }) => existsSync(`assets/pixel_map/${id}.web
 assert.equal(existsSync('assets/pixel_map/canopy-overlay.png'), true);
 assert.equal(mapData.walkability.width, 1024);
 assert.equal(mapData.walkability.rows.length, 1024);
+assert.ok(mapData.building_entrances.every(({ position_global:[x,y] }) => mapData.walkability.rows[Math.floor(y/8)].some(([start,length]) => x/8 >= start && x/8 < start+length)));
 assert.equal(mapData.landmarks.find(({letter}) => letter === 'K').label_points_global.length, 3);
 assert.equal(mapData.landmarks.some(({letter}) => letter === 'V'), false);
 assert.equal(isRoadColor(232, 241, 251), true);
