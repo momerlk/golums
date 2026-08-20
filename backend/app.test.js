@@ -23,6 +23,8 @@ test('validates progress at the trust boundary', () => {
   assert.equal(validateProgress(valid)._id, 'student@lums.edu.pk');
   assert.equal(validateProgress({ ...valid, email: 'not-an-email' }), null);
   assert.equal(validateProgress({ ...valid, position: [-1, 4] }), null);
+  assert.equal(validateProgress({ ...valid, sessionCount: -1 }), null);
+  assert.equal(validateProgress({ ...valid, playTimeSeconds: 1.5 }), null);
 });
 
 test('normalizes Pakistani phone identities', () => {
@@ -49,8 +51,8 @@ test('allows saves from any frontend origin', async () => {
 });
 
 test('phone is the unique save and load identity', async () => {
-  assert.equal((await fetch(`${baseUrl}/api/progress`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(phonePlayer) })).status, 200);
+  assert.equal((await fetch(`${baseUrl}/api/progress`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...phonePlayer, sessionCount: 3, playTimeSeconds: 90 }) })).status, 200);
   const response = await fetch(`${baseUrl}/api/progress/load`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ phone: '+92 300 0856955' }) });
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).username, 'Omer');
+  assert.deepEqual(await response.json().then(({ username, sessionCount, playTimeSeconds }) => ({ username, sessionCount, playTimeSeconds })), { username: 'Omer', sessionCount: 3, playTimeSeconds: 90 });
 });

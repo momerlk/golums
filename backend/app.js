@@ -17,7 +17,7 @@ export function normalizePhone(value) {
 
 export function validateProgress(body) {
   if (!body || typeof body !== 'object') return null;
-  const { email, phone, username, gender, discovered, position, muted, biking, updatedAt } = body;
+  const { email, phone, username, gender, discovered, position, muted, biking, sessionCount = 0, playTimeSeconds = 0, updatedAt } = body;
   const normalizedPhone = normalizePhone(phone), normalizedEmail = normalizeEmail(email), id = normalizedPhone || normalizedEmail;
   const cleanUsername = typeof username === 'string' ? username.trim() : '';
   if (!id || (normalizedPhone && (cleanUsername.length < 2 || cleanUsername.length > 30))
@@ -25,8 +25,10 @@ export function validateProgress(body) {
     || !Array.isArray(discovered) || discovered.length > 25 || !discovered.every((id) => LANDMARK_ID.test(id))
     || !Array.isArray(position) || position.length !== 2 || !position.every((value) => Number.isFinite(value) && value >= 0 && value <= 8192)
     || typeof muted !== 'boolean' || typeof biking !== 'boolean'
+    || !Number.isSafeInteger(sessionCount) || sessionCount < 0
+    || !Number.isSafeInteger(playTimeSeconds) || playTimeSeconds < 0
     || !Number.isFinite(Date.parse(updatedAt))) return null;
-  return { _id: id, ...(normalizedPhone ? { phone: normalizedPhone, username: cleanUsername } : { email: normalizedEmail }), gender, discovered: [...new Set(discovered)], position, muted, biking, updatedAt: new Date(updatedAt) };
+  return { _id: id, ...(normalizedPhone ? { phone: normalizedPhone, username: cleanUsername } : { email: normalizedEmail }), gender, discovered: [...new Set(discovered)], position, muted, biking, sessionCount, playTimeSeconds, updatedAt: new Date(updatedAt) };
 }
 
 export function createApp(players) {
